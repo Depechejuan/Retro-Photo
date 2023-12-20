@@ -25,8 +25,8 @@ async function createTables(pool) {
         CREATE TABLE IF NOT EXISTS users(
             id CHAR(36) PRIMARY KEY,
             email VARCHAR(120) NOT NULL UNIQUE,
-            userName VARCHAR(20) NOT NULL UNIQUE,
             nickName VARCHAR(50) NOT NULL UNIQUE,
+            userName VARCHAR(20) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             name VARCHAR(50),
             lastName VARCHAR (100),
