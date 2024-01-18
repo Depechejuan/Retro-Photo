@@ -9,3 +9,9 @@ So, thinking about it...
 Why not bring this to today?
 
 "Retro-Photo" evokes a similar feeling, where each of your guests can only take 3 photos during the most important event of your life. The magic of the unexpected will return! There's no turning back. If you take a photo, it will be saved! And you won't know what photos there are until the next day.
+
+# How To Use
+
+Retro-Photos is a very easy app to use.
+
+Just click on "take a picture", and it will automatically upload it to the server and sended to the Cloud.

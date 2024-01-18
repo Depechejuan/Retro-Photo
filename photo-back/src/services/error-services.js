@@ -6,6 +6,13 @@ const { sendResponse } = require("../utils/send-response");
 let err;
 
 module.exports = {
+    genericError() {
+        err = new Error("Something Went Wrong");
+        err.status = 500;
+        err.code = "SOMETHING_WENT_WRONG";
+        throw err;
+    },
+
     invalidCredentials() {
         err = new Error("You must enter a valid email and password");
         err.status = 400;
