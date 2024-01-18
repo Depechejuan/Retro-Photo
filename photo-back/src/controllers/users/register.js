@@ -25,12 +25,13 @@ const {
 
 module.exports = {
     async register(data) {
-        if (!data.acceptedTOS) {
-            didNotAcceptedTOS();
-        }
         const alreadyReg = await getUserByEmail(data.email);
+        console.log(alreadyReg);
         if (alreadyReg) {
             emailAlreadyRegistered();
+        }
+        if (!data.acceptedTOS) {
+            didNotAcceptedTOS();
         }
 
         const hashedPass = await hashPassword(data.password);

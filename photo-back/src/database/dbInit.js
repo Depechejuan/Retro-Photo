@@ -12,9 +12,9 @@ const dbInit = async () => {
     console.log("Database sucessfuly deleted");
     console.log("Creating new Data Base");
     await pool.query(`CREATE DATABASE ${DATABASE_NAME}`);
+    console.log("Database created");
+    await pool.query(`USE ${DATABASE_NAME}`);
     console.log("Database created successfuly");
-    console.log(`USE ${DATABASE_NAME}`);
-    console.log("Generating content...");
     await createTables(pool);
     console.log("All done");
     await pool.end();
@@ -26,7 +26,6 @@ async function createTables(pool) {
             id CHAR(36) PRIMARY KEY,
             email VARCHAR(120) NOT NULL UNIQUE,
             nickName VARCHAR(50) NOT NULL UNIQUE,
-            userName VARCHAR(20) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             name VARCHAR(50),
             lastName VARCHAR (100),
@@ -65,3 +64,5 @@ async function createTables(pool) {
         );
     `);
 }
+
+dbInit();

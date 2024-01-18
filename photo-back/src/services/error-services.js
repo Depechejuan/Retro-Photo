@@ -1,5 +1,8 @@
 "use strict";
 
+const { sendError } = require("../utils/send-error");
+const { sendResponse } = require("../utils/send-response");
+
 let err;
 
 module.exports = {
@@ -7,10 +10,11 @@ module.exports = {
         err = new Error("You must enter a valid email and password");
         err.status = 400;
         err.code = "INVALID_CREDENTIALS";
+        throw err;
     },
 
     emailAlreadyRegistered() {
-        err = new Error("This email has already been registered");
+        const err = new Error("This email has already been registered");
         err.status = 400;
         err.code = "EMAIL_ALREADY_REGISTERED";
         throw err;

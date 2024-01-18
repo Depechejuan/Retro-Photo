@@ -1,3 +1,5 @@
+import Form from "../components/Form-Input";
+
 function HomePage() {
 
     return (
@@ -6,6 +8,7 @@ function HomePage() {
                 Retro Photo for Weddings
             </h1>
             <p>Take first picture</p>
+            <Form />
         </>
     )
 }

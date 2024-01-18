@@ -18,6 +18,7 @@ function createPool(database) {
 
 function getConnection() {
     if (!pool) {
+        const { MYSQL_DATABASE } = process.env;
         pool = createPool(MYSQL_DATABASE);
     }
     return pool;

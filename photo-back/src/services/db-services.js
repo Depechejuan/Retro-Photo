@@ -20,15 +20,36 @@ module.exports = {
 
     async saveUser(user) {
         const statement = `
-        INSERT INTO users(
-            id, email, nickName, password, role, acceptedTOS
-        )`;
+            INSERT INTO users(
+                id, email, nickName, password, acceptedTOS
+            )
+            VALUES (?, ?, ?, ?, ?)`;
         const [rows] = await db.execute(statement, [
             user.id,
-            user.nickName,
+            user.email,
+            user.nickname,
             user.password,
-            user.role,
             user.acceptedTOS,
+        ]);
+        return rows;
+    },
+
+    // revisar logica
+    async editUser(idUser, data) {
+        const statement = `
+            UPDATE users
+                SET name = ?, lastName = ?, birthday = ?, country = ?, city = ?, avatarURL = ?, role = ?, modifiedAt = ?
+            WHERE id = ?`;
+        const [rows] = await db.execute(statement, [
+            data.name ?? null,
+            data.lastname ?? null,
+            data.birthday ?? null,
+            data.country ?? null,
+            data.city ?? null,
+            data.avatarURL ?? null,
+            data.role ?? null,
+            data.modifiedAt,
+            idUser,
         ]);
         return rows;
     },
