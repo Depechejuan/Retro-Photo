@@ -22,45 +22,34 @@ const dbInit = async () => {
 
 async function createTables(pool) {
     await pool.query(`
-        CREATE TABLE IF NOT EXISTS users(
+        CREATE TABLE IF NOT EXISTS users (
             id CHAR(36) PRIMARY KEY,
-            email VARCHAR(120) NOT NULL UNIQUE,
-            nickName VARCHAR(50) NOT NULL UNIQUE,
+            firstName VARCHAR(255),
+            lastName VARCHAR(255),
+            email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            name VARCHAR(50),
-            lastName VARCHAR (100),
-            birthday TIMESTAMP,
-            country VARCHAR(150),
-            city VARCHAR(150),
-            avatarURL VARCHAR(255),
-            weddingCode VARCHAR(20),
+            birthDate TIMESTAMP,
+            city VARCHAR(255),
+            country VARCHAR(255),
+            avatarUrl VARCHAR(255),
+            gender ENUM('Male', 'Female', 'Non-Binary'),
+            role ENUM('Admin', 'Mod', 'User'),
             acceptedTOS BOOLEAN NOT NULL,
-            role ENUM('Bride', 'Groom', 'Photographer'),
-            typeUser ENUM('Admin', 'Moderator', 'User') DEFAULT 'User',
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP
         );
     `);
 
     await pool.query(`
-        CREATE TABLE IF NOT EXISTS weddingDate(
+        CREATE TABLE IF NOT EXISTS weddings (
             id CHAR(36) PRIMARY KEY,
-            weddingName VARCHAR(255) NOT NULL,
-            idUser CHAR(36),
-            weddingDay TIMESTAMP NOT NULL,
+            weddingCode VARCHAR(20) UNIQUE NOT NULL,
+            idUser1 CHAR(36) NOT NULL,
+            idUser2 CHAR(36) NOT NULL,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (idUser) REFERENCES users(id)
-        );
-        `);
-
-    await pool.query(`
-        CREATE TABLE IF NOT EXISTS photos(
-            id CHAR(36) PRIMARY KEY,
-            idWedding CHAR(36),
-            idUser CHAR(36),
-            imageURL VARCHAR(255) NOT NULL,
-            FOREIGN KEY (idWedding) REFERENCES weddingDate(id),
-            FOREIGN KEY (idUser) REFERENCES users(id)
+            modifiedAt TIMESTAMP,
+            FOREIGN KEY (idUser1) REFERENCES users(id),
+            FOREIGN KEY (idUser2) REFERENCES users(id)
         );
     `);
 }

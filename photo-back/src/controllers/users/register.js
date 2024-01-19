@@ -26,7 +26,6 @@ const {
 module.exports = {
     async register(data) {
         const alreadyReg = await getUserByEmail(data.email);
-        console.log(alreadyReg);
         if (alreadyReg) {
             emailAlreadyRegistered();
         }
@@ -42,6 +41,7 @@ module.exports = {
             id,
             password: hashedPass,
         };
+        console.log(user);
         await saveUser(user);
 
         return {

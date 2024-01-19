@@ -4,7 +4,13 @@ const db = getConnection();
 module.exports = {
     async getUserByEmail(email) {
         const statement = `
-        SELECT email FROM users WHERE users.email = ?`;
+        SELECT * FROM users WHERE users.email = ?`;
+        const [rows] = await db.execute(statement, [email]);
+        return rows[0];
+    },
+    async getPassByEmail(email) {
+        const statement = `
+        SELECT password FROM users WHERE users.email = ?`;
         const [rows] = await db.execute(statement, [email]);
         return rows[0];
     },
@@ -21,13 +27,12 @@ module.exports = {
     async saveUser(user) {
         const statement = `
             INSERT INTO users(
-                id, email, nickName, password, acceptedTOS
+                id, email, password, acceptedTOS
             )
-            VALUES (?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?  )`;
         const [rows] = await db.execute(statement, [
             user.id,
             user.email,
-            user.nickname,
             user.password,
             user.acceptedTOS,
         ]);
