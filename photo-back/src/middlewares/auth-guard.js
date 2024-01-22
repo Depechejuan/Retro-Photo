@@ -1,10 +1,10 @@
 "use strict";
 
 const { invalidCredentials } = require("../services/error-services");
-const jwt = requre("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-    if (!req.currentUser) {
+    if (!req.currentuser) {
         const err = invalidCredentials();
         return res.status(err.statusCode).json({
             error: err.message,

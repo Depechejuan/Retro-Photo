@@ -1,13 +1,18 @@
 "use strict";
 
 const { Router, json } = require("express");
-const multer = require("multer");
-const upload = multer();
 const { register } = require("../controllers/users/register");
 const { sendResponse } = require("../utils/send-response");
-const { emailAlreadyRegistered } = require("../services/error-services");
+const {
+    emailAlreadyRegistered,
+    partnerNotRegistered,
+} = require("../services/error-services");
 const { sendError } = require("../utils/send-error");
 const { login } = require("../controllers/users/login");
+const authGuard = require("../middlewares/auth-guard");
+const { generateQR } = require("../services/generate-qr");
+const { getUserByEmail } = require("../services/db-services");
+const { generateUUID } = require("../services/crypto-services");
 
 const router = Router();
 
@@ -31,4 +36,35 @@ router.post("/login", json(), async (req, res) => {
     }
 });
 
+router.get("/test", async (req, res) => {
+    console.log(req.currentuser);
+    sendResponse(res, req.currentuser);
+});
+
+router.get("/wedding/create", authGuard, async (req, res) => {
+    console.log(req.body);
+    const data = req.body;
+    const currentUser = req.currentuser.email;
+    console.log(currentUser);
+    const partnerMail = await getUserByEmail(data.partner);
+    // TODO: ENVIAR MAIL CON INVITACIÓN A REGISTRO DEL PARNER
+    if (!partnerMail) {
+        const errorResponse = partnerNotRegistered();
+        sendResponse(res, errorResponse, errorResponse.status);
+        return;
+    }
+
+    const QR = await generateQR();
+    const obj = {
+        id: generateUUID(),
+        weddingCode: QR,
+        idUser1: currentUser,
+        idUser2: partnerMail,
+        weddingDate: data.date,
+    };
+    console.log("The Object");
+    console.log(obj);
+    //Guardarlo en la BBDD
+    sendResponse(res, obj);
+});
 module.exports = router;

@@ -46,6 +46,7 @@ async function createTables(pool) {
             weddingCode VARCHAR(20) UNIQUE NOT NULL,
             idUser1 CHAR(36) NOT NULL,
             idUser2 CHAR(36) NOT NULL,
+            weddingDate TIMESTAMP NOT NULL,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP,
             FOREIGN KEY (idUser1) REFERENCES users(id),

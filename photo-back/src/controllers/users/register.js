@@ -41,7 +41,6 @@ module.exports = {
             id,
             password: hashedPass,
         };
-        console.log(user);
         await saveUser(user);
 
         return {

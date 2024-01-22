@@ -23,6 +23,15 @@ module.exports = {
         return crypto.randomUUID();
     },
 
+    parseJWT(token) {
+        try {
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            return { ...payload, token };
+        } catch {
+            return null;
+        }
+    },
+
     generateJWT(token) {
         const secretKey = process.env.JWT_SECRET;
 

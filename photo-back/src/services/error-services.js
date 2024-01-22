@@ -54,4 +54,14 @@ module.exports = {
         err.code = "NOT_FOUND";
         throw err;
     },
+    // USAR ESTE COMO EJEMPLO PARA EL RESTO DE ERRORES ARRIBA HECHOS
+    partnerNotRegistered() {
+        return {
+            success: false,
+            status: 422,
+            code: "PARTNER_NOT_REGISTERED",
+            message:
+                "The user you invited is not registered. We sent an email to initialize the registration form. Try again when it's done!",
+        };
+    },
 };

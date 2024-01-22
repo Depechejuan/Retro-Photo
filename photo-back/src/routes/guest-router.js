@@ -9,23 +9,11 @@ const { register } = require("../controllers/users/register");
 const { sendResponse } = require("../utils/send-response");
 const { emailAlreadyRegistered } = require("../services/error-services");
 const { sendError } = require("../utils/send-error");
-const { generateUUID } = require("../services/crypto-services");
-
-const HOST = process.env.HOST || "localhost";
 
 const router = Router();
 
 router.post("/wedding/:id", json(), async (req, res) => {
     console.log("Bienvenido a la boda!");
-});
-
-router.get("/wedding/create", async (req, res) => {
-    const uuid = generateUUID();
-    const URL = `${HOST}/wedding/${uuid}`;
-    const qrCode = await QRCode.toDataURL(URL);
-    const qrImagePath = path.join(__dirname, `../public/qrcodes/${uuid}.png`);
-    const QR = await QRCode.toFile(qrImagePath, URL);
-    sendResponse(res, QR);
 });
 
 router.post("/upload", json(), upload.array("photo", 1), async (req, res) => {
