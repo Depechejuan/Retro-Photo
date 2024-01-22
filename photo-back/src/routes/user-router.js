@@ -13,6 +13,7 @@ const authGuard = require("../middlewares/auth-guard");
 const { generateQR } = require("../services/generate-qr");
 const { getUserByEmail } = require("../services/db-services");
 const { generateUUID } = require("../services/crypto-services");
+const { sendInvite } = require("../services/mailer");
 
 const router = Router();
 
@@ -46,10 +47,14 @@ router.get("/wedding/create", authGuard, async (req, res) => {
     const data = req.body;
     const currentUser = req.currentuser.email;
     console.log(currentUser);
+    console.log(data.partner);
     const partnerMail = await getUserByEmail(data.partner);
     // TODO: ENVIAR MAIL CON INVITACIÓN A REGISTRO DEL PARNER
     if (!partnerMail) {
         const errorResponse = partnerNotRegistered();
+
+        const sendMail = await sendInvite(data);
+        console.log(sendMail);
         sendResponse(res, errorResponse, errorResponse.status);
         return;
     }
