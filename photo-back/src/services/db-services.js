@@ -53,6 +53,17 @@ module.exports = {
         ]);
     },
 
+    async checkWedding(id) {
+        const statement = `
+            SELECT weddings.id
+            FROM weddings
+            INNER JOIN users ON weddings.idUser1 = users.id OR weddings.idUser2 = users.id
+            WHERE users.id = ?;
+        `;
+        const [rows] = await db.execute(statement, [id]);
+        return rows;
+    },
+
     // revisar logica
     async editUser(idUser, data) {
         const statement = `

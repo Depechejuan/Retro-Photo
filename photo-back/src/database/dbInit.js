@@ -43,7 +43,7 @@ async function createTables(pool) {
     await pool.query(`
         CREATE TABLE IF NOT EXISTS weddings (
             id CHAR(36) PRIMARY KEY,
-            weddingCode VARCHAR(20) UNIQUE NOT NULL,
+            weddingCode CHAR(36) UNIQUE NOT NULL,
             idUser1 CHAR(36) NOT NULL,
             idUser2 CHAR(36) NOT NULL,
             weddingDate TIMESTAMP NOT NULL,

@@ -1,3 +1,4 @@
+import Form from "../components/Form-Input";
 
 function UploadPhotos() {
 
@@ -7,6 +8,7 @@ function UploadPhotos() {
                 Retro Photo for Weddings
             </h1>
             <p>Take first picture</p>
+            <Form />
         </>
     )
 }

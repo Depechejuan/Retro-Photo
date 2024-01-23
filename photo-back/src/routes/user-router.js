@@ -6,12 +6,17 @@ const { sendResponse } = require("../utils/send-response");
 const {
     emailAlreadyRegistered,
     partnerNotRegistered,
+    weddingAlreadyCreated,
 } = require("../services/error-services");
 const { sendError } = require("../utils/send-error");
 const { login } = require("../controllers/users/login");
 const authGuard = require("../middlewares/auth-guard");
 const { generateQR } = require("../services/generate-qr");
-const { getUserByEmail } = require("../services/db-services");
+const {
+    getUserByEmail,
+    createWeddingCode,
+    checkWedding,
+} = require("../services/db-services");
 const { generateUUID } = require("../services/crypto-services");
 const { sendInvite } = require("../services/mailer");
 
@@ -38,38 +43,48 @@ router.post("/login", json(), async (req, res) => {
 });
 
 router.get("/test", async (req, res) => {
-    console.log(req.currentuser);
-    sendResponse(res, req.currentuser);
+    sendResponse(res);
 });
 
 router.get("/wedding/create", authGuard, async (req, res) => {
-    console.log(req.body);
-    const data = req.body;
-    const currentUser = req.currentuser.email;
-    console.log(currentUser);
-    console.log(data.partner);
-    const partnerMail = await getUserByEmail(data.partner);
-    // TODO: ENVIAR MAIL CON INVITACIÓN A REGISTRO DEL PARNER
-    if (!partnerMail) {
-        const errorResponse = partnerNotRegistered();
-
-        const sendMail = await sendInvite(data);
-        console.log(sendMail);
-        sendResponse(res, errorResponse, errorResponse.status);
+    console.log(req.currentuser.id);
+    const check = await checkWedding(req.currentuser.id);
+    console.log(".........");
+    console.log(check);
+    if (check.length > 0) {
+        const idWedding = check[0].id;
+        const errorResponse = weddingAlreadyCreated();
+        sendError(res, errorResponse, idWedding);
         return;
     }
 
+    const data = req.body;
+    const partnerMail = await getUserByEmail(data.partner);
+    if (!partnerMail) {
+        const errorResponse = partnerNotRegistered();
+        await sendInvite(data);
+        sendError(res, errorResponse);
+        return;
+    }
     const QR = await generateQR();
+    console.log(QR);
     const obj = {
         id: generateUUID(),
         weddingCode: QR,
-        idUser1: currentUser,
-        idUser2: partnerMail,
+        idUser1: req.currentuser.id,
+        idUser2: partnerMail.id,
         weddingDate: data.date,
     };
     console.log("The Object");
     console.log(obj);
     //Guardarlo en la BBDD
-    sendResponse(res, obj);
+    await createWeddingCode(obj);
+    const idWedding = await checkWedding(req.currentuser.id);
+    sendResponse(res, obj, idWedding);
 });
+
+router.get("user/:id", authGuard, async (req, res) => {
+    sendResponse(res);
+});
+
 module.exports = router;

@@ -3,58 +3,70 @@
 const { sendError } = require("../utils/send-error");
 const { sendResponse } = require("../utils/send-response");
 
-let err;
-
 module.exports = {
     genericError() {
-        err = new Error("Something Went Wrong");
-        err.status = 500;
-        err.code = "SOMETHING_WENT_WRONG";
-        throw err;
+        return {
+            success: false,
+            status: 500,
+            code: "SOMETHING_WENT_WRONG",
+            message: "Something Went Wrong",
+        };
     },
 
     invalidCredentials() {
-        err = new Error("You must enter a valid email and password");
-        err.status = 400;
-        err.code = "INVALID_CREDENTIALS";
-        throw err;
+        return {
+            success: false,
+            status: 400,
+            code: "INVALID_CREDENTIALS",
+            message: "You must enter a valid email and password",
+        };
     },
 
     emailAlreadyRegistered() {
-        const err = new Error("This email has already been registered");
-        err.status = 400;
-        err.code = "EMAIL_ALREADY_REGISTERED";
-        throw err;
+        return {
+            success: false,
+            status: 400,
+            code: "EMAIL_ALREADY_REGISTERED",
+            message: "This email has already been registered",
+        };
     },
 
     didNotAcceptedTOS() {
-        err = new Error("User must accept terms and services to register");
-        err.status = 403;
-        err.code = "DID_NOT_ACCEPT_TOS";
-        throw err;
+        return {
+            success: false,
+            status: 403,
+            code: "DID_NOT_ACCEPT_TOS",
+            message: "User must accept terms and services to register",
+        };
     },
 
     notAuth() {
-        err = new Error("User not authenticated. Token missing");
-        err.status = 401;
-        err.code = "NOT_AUTHENTICATED";
-        throw err;
+        return {
+            success: false,
+            status: 401,
+            code: "NOT_AUTHENTICATED",
+            message: "User not authenticated. Token missing",
+        };
     },
 
     unauthorized() {
-        err = new Error("User not authorized to do this action");
-        err.status = 403;
-        err.code = "UNAUTHORIZED";
-        throw err;
+        return {
+            success: false,
+            status: 403,
+            code: "UNAUTHORIZED",
+            message: "User not authorized to do this action",
+        };
     },
 
     notFound() {
-        err = new Error("Not Found");
-        err.status = 404;
-        err.code = "NOT_FOUND";
-        throw err;
+        return {
+            success: false,
+            status: 404,
+            code: "NOT_FOUND",
+            message: "Looks like this doesn't exists...",
+        };
     },
-    // USAR ESTE COMO EJEMPLO PARA EL RESTO DE ERRORES ARRIBA HECHOS
+
     partnerNotRegistered() {
         return {
             success: false,
@@ -62,6 +74,15 @@ module.exports = {
             code: "PARTNER_NOT_REGISTERED",
             message:
                 "The user you invited is not registered. We sent an email to initialize the registration form. Try again when it's done!",
+        };
+    },
+
+    weddingAlreadyCreated() {
+        return {
+            success: false,
+            status: 409,
+            code: "RESOURCE_CONFLICT",
+            message: "This resource already exists",
         };
     },
 };

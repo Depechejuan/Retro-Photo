@@ -2,7 +2,7 @@
 
 const sendResponse = (res, data, status = 200) => {
     res.status(status).json({
-        success: data.success ?? true,
+        success: true,
         data,
         message: res.status ?? null,
     });
