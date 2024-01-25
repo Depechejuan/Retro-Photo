@@ -17,7 +17,7 @@ module.exports = {
 
     async getUserById(idUser) {
         const statement = `
-        SELECT id, userName
+        SELECT id, firstName, lastName, email, birthDate, city, country, avatarUrl, gender, role
         FROM users
         WHERE id = ?`;
         const [rows] = await db.execute(statement, [idUser]);
@@ -61,7 +61,15 @@ module.exports = {
             WHERE users.id = ?;
         `;
         const [rows] = await db.execute(statement, [id]);
-        return rows;
+        return rows[0];
+    },
+
+    async weddingData(id) {
+        const statement = `
+        SELECT * FROM weddings WHERE id = ?
+        `;
+        const [rows] = await db.execute(statement, [id]);
+        return rows[0];
     },
 
     // revisar logica

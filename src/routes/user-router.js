@@ -4,7 +4,6 @@ const { Router, json } = require("express");
 const { register } = require("../controllers/users/register");
 const { sendResponse } = require("../utils/send-response");
 const {
-    emailAlreadyRegistered,
     partnerNotRegistered,
     weddingAlreadyCreated,
 } = require("../services/error-services");
@@ -16,6 +15,8 @@ const {
     getUserByEmail,
     createWeddingCode,
     checkWedding,
+    getUserById,
+    weddingData,
 } = require("../services/db-services");
 const { generateUUID } = require("../services/crypto-services");
 const { sendInvite } = require("../services/mailer");
@@ -35,7 +36,6 @@ router.post("/login", json(), async (req, res) => {
     console.log("login");
     try {
         const token = await login(req.body);
-        console.log(token);
         sendResponse(res, { token });
     } catch (err) {
         sendResponse(res, err);
@@ -66,6 +66,7 @@ router.get("/wedding/create", authGuard, async (req, res) => {
         sendError(res, errorResponse);
         return;
     }
+
     const QR = await generateQR();
     console.log(QR);
     const obj = {
@@ -75,15 +76,29 @@ router.get("/wedding/create", authGuard, async (req, res) => {
         idUser2: partnerMail.id,
         weddingDate: data.date,
     };
-    console.log("The Object");
-    console.log(obj);
-    //Guardarlo en la BBDD
+
     await createWeddingCode(obj);
     const idWedding = await checkWedding(req.currentuser.id);
     sendResponse(res, obj, idWedding);
 });
 
-router.get("user/:id", authGuard, async (req, res) => {
+router.get("/controlpanel", authGuard, json(), async (req, res) => {
+    console.log("Empezamos CP");
+    const idUser = req.currentuser.id;
+    console.log(idUser);
+    const user = await getUserById(idUser);
+    const idWedding = await checkWedding(idUser);
+    if (!idWedding) {
+        console.log("No hay wedding!");
+        sendResponse(res, user);
+        return;
+    }
+    const wedding = await weddingData(idWedding.id);
+    const info = [user, wedding];
+    sendResponse(res, info);
+});
+
+router.get("/user/:id", authGuard, async (req, res) => {
     sendResponse(res);
 });
 
