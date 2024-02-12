@@ -10,8 +10,9 @@ Why not bring this to today?
 
 "Retro-Photo" evokes a similar feeling, where each of your guests can only take 3 photos during the most important event of your life. The magic of the unexpected will return! There's no turning back. If you take a photo, it will be saved! And you won't know what photos there are until the next day.
 
-# How To Use
+# How To Use (Back-End)
 
 Retro-Photos is a very easy app to use.
-
-Just click on "take a picture", and it will automatically upload it to the server and sended to the Cloud.
+Just click on "take a picture", and it will automatically upload it to the server and sended to your Google Drive Cloud. Some steps has to be done following this tutorial
+https://www.youtube.com/watch?v=1y0-IfRW114
+This way, you can create your own APIKEY and added to your .ENV file to upload the files to your own Drive.
