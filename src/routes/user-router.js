@@ -19,9 +19,14 @@ const {
     weddingData,
 } = require("../services/db-services");
 const { generateUUID } = require("../services/crypto-services");
-const { sendInvite } = require("../services/mailer");
+// const { sendInvite } = require("../services/mailer");
 
 const router = Router();
+
+router.post("/", json(), async (req, res) => {
+    console.log("Bienvenido a la Juangy Boda!");
+    sendResponse(res);
+});
 
 router.post("/register", json(), async (req, res) => {
     try {
@@ -43,6 +48,7 @@ router.post("/login", json(), async (req, res) => {
 });
 
 router.get("/test", async (req, res) => {
+    console.log("Its working...");
     sendResponse(res);
 });
 
@@ -60,12 +66,12 @@ router.get("/wedding/create", authGuard, async (req, res) => {
 
     const data = req.body;
     const partnerMail = await getUserByEmail(data.partner);
-    if (!partnerMail) {
-        const errorResponse = partnerNotRegistered();
-        await sendInvite(data);
-        sendError(res, errorResponse);
-        return;
-    }
+    // if (!partnerMail) {
+    //     const errorResponse = partnerNotRegistered();
+    //     await sendInvite(data);
+    //     sendError(res, errorResponse);
+    //     return;
+    // }
 
     const QR = await generateQR();
     console.log(QR);

@@ -1,7 +1,5 @@
 const path = require("path");
 const fs = require("fs/promises");
-const sharp = require("sharp");
-const { genericError } = require("./error-service");
 const { google } = require("googleapis");
 const { Readable } = require("stream");
 
@@ -9,7 +7,7 @@ const urlDrive = process.env.GoogleDriveFolder;
 
 // async deleted on the return new Promise(async ()....)
 async function uploadFile(jwtClient, fileURL, photo) {
-    console.log(photo);
+    console.log("Doing stuff to GD");
     return new Promise((resolve, rejected) => {
         const drive = google.drive({ version: "v3", auth: jwtClient });
         let fileMetaData = {
