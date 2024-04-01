@@ -1,33 +1,48 @@
 const path = require("path");
 const fs = require("fs/promises");
-const { google } = require("googleapis");
+require("dotenv").config;
 const { Readable } = require("stream");
+const { genericError } = require("./error-services");
 
-const urlDrive = process.env.GoogleDriveFolder;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+});
 
 // async deleted on the return new Promise(async ()....)
-async function uploadFile(jwtClient, fileURL, photo) {
-    console.log("Doing stuff to GD");
-    return new Promise((resolve, rejected) => {
-        const drive = google.drive({ version: "v3", auth: jwtClient });
-        let fileMetaData = {
-            name: fileURL,
-            parents: [`${urlDrive}`],
-        };
+async function uploadFile(fileURL, photo) {
+    try {
+        photo.originalname = `${fileURL}.jpg`;
 
-        try {
-            const response = drive.files.create({
-                resource: fileMetaData,
-                media: {
-                    body: Readable.from([photo.buffer]),
+        const bufferStream = new Readable();
+        bufferStream.push(photo.buffer);
+        bufferStream.push(null);
+
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: `Wedding`,
+                    public_id: fileURL,
                 },
-            });
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
 
-            resolve(response);
-        } catch (err) {
-            rejected(err);
-        }
-    });
+            bufferStream.pipe(uploadStream);
+        });
+
+        console.log(result);
+        console.log(result.secure_url);
+        console.log(result.url);
+
+        return photo.originalname;
+    } catch (err) {
+        console.log(err);
+        throw genericError();
+    }
 }
 
 async function deleteFile(jwtClient, fileName) {
