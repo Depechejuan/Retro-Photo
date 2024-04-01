@@ -1,4 +1,5 @@
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
 const fs = require("fs/promises");
 require("dotenv").config;
 const { Readable } = require("stream");
