@@ -16,8 +16,8 @@ router.post("/depeche", json(), upload.array("photo", 3), async (req, res) => {
     console.log("Subiendo la foto a la JuangyBoda!");
     try {
         const data = req.body;
-        const wedding = data.WEDDING || "test";
-        const user = data.USER_WEDDING || "paco";
+        const wedding = data.WEDDING || "Juangy";
+        const user = data.USER_WEDDING || "User";
         const photos = req.files;
 
         const sendFile = await sendPhotos(wedding, user, photos[0]);

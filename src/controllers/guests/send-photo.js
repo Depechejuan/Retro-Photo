@@ -5,7 +5,7 @@ module.exports = {
     async sendPhotos(idWedding, idUser, photo) {
         try {
             const idPhoto = generateUUID();
-            const fileURL = `/${idWedding}/${idUser}/${idPhoto}`;
+            const fileURL = `/${idUser}-${idPhoto}`;
             await uploadFile(fileURL, photo);
             console.log("Photo uploaded successfully");
             const savedPhoto = { idPhoto, fileURL };

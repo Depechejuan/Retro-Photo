@@ -1,7 +1,7 @@
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs/promises");
-require("dotenv").config;
+require("dotenv").config();
 const { Readable } = require("stream");
 const { genericError } = require("./error-services");
 
