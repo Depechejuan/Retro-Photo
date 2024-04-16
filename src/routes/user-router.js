@@ -108,4 +108,12 @@ router.get("/user/:id", authGuard, async (req, res) => {
     sendResponse(res);
 });
 
+router.get("/check", async (req, res) => {
+    try {
+        sendResponse(res);
+    } catch (err) {
+        sendError(err);
+    }
+});
+
 module.exports = router;
